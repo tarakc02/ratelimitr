@@ -1,0 +1,51 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+## ratelimitr
+Use ratelimitr to limit the rate at which functions are called. 
+
+```{r ex1}
+library(ratelimitr)
+f <- function() NULL
+
+# create a version of f that can only be called 10 times per .01 seconds
+f_lim <- limit_rate(f, rates = list(
+    c(n = 10, period = 3)
+))
+
+system.time(replicate(11, f()))
+
+system.time(replicate(11, f_lim()))
+```
+
+You can add multiple rates
+```{r ex2}
+f_lim <- limit_rate(f, rates = list(
+    c(n = 10, period = .01),
+    c(n = 50, period = .1)
+))
+
+timef <- function(n) {
+    replicate(n, f_lim())
+    reset(f_lim)
+}
+
+library(microbenchmark)
+microbenchmark(
+    f_lim <- timef(9),
+    f_lim <- timef(11),
+    f_lim <- timef(49),
+    f_lim <- timef(51)
+)
+```
