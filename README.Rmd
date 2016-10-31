@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 ```
 
 ## ratelimitr
-Use ratelimitr to limit the rate at which functions are called. 
+Use ratelimitr to limit the rate at which functions are called. A rate-limited function that allows `n` calls per `period` will never have a window of time of length `period` that includes more than `n` calls. 
 
 ```{r ex1}
 library(ratelimitr)
@@ -37,6 +37,8 @@ f_lim <- limit_rate(
     rate(n = 50, period = .1)
 )
 
+# reset function is for convenience. it does not modify the original 
+# rate-limited function, just returns a new one
 timef <- function(n) {
     replicate(n, f_lim())
     reset(f_lim)
