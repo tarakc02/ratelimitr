@@ -24,14 +24,3 @@ token_dispenser <- function(n, period) {
 
 request <- function(x) UseMethod("request")
 request.token_dispenser <- function(x) x()
-
-# bloop <- dispenser(10, .1)
-# system.time(replicate(11, bloop()))
-#
-# library(microbenchmark)
-# microbenchmark(
-#     bloop <- dispenser(10, .1),
-#     replicate(9, bloop()),
-#     bloop <- dispenser(10, .1),
-#     replicate(11, bloop())
-# )
