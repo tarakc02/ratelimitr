@@ -20,5 +20,5 @@ limit_rate <- function(f, rates) {
 reset <- function(f) UseMethod("reset")
 
 #' @export
-reset.rate_limited_function <- function(f) limit_rate(attr(f, "func"),
-                                                      rates = attr(f, "rates"))
+reset.rate_limited_function <- function(f)
+    limit_rate(attr(f, "func"), rates = attr(f, "rates"))
