@@ -1,3 +1,4 @@
+#' @export
 token_dispenser <- function(n, period) {
     init_time <- as.numeric(Sys.time())
 
@@ -22,5 +23,8 @@ token_dispenser <- function(n, period) {
     structure(request, class = "token_dispenser")
 }
 
+#' @export
 request <- function(x) UseMethod("request")
+
+#' @export
 request.token_dispenser <- function(x) x()

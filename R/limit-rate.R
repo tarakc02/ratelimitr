@@ -5,7 +5,6 @@ limit_rate <- function(f, ...) {
 }
 
 limit_rate_ <- function(f, rates) {
-    request <- request.token_dispenser
     is_rate <- function(rt) {
         if (!inherits(rt, "rate_limit"))
             stop("Invalid rate")
@@ -39,6 +38,7 @@ reset <- function(f) UseMethod("reset")
 reset.rate_limited_function <- function(f)
     limit_rate_(attr(f, "func"), rates = attr(f, "rates"))
 
+#' @export
 print.rate_limited_function <- function(f) {
     rates <- attr(f, "rates")
     func <- attr(f, "func")
