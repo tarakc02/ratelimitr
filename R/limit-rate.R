@@ -38,3 +38,17 @@ reset <- function(f) UseMethod("reset")
 #' @export
 reset.rate_limited_function <- function(f)
     limit_rate_(attr(f, "func"), rates = attr(f, "rates"))
+
+print.rate_limited_function <- function(f) {
+    rates <- attr(f, "rates")
+    func <- attr(f, "func")
+
+    catrate <- function(rate) {
+        cat("    ", rate[["n"]], "calls per", rate[["period"]], "seconds\n")
+    }
+
+    cat("A rate limited function, with rates:\n")
+    lapply(rates, catrate)
+    print(func)
+    invisible(f)
+}
