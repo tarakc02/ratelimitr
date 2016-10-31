@@ -9,28 +9,28 @@ Use ratelimitr to limit the rate at which functions are called.
 library(ratelimitr)
 f <- function() NULL
 
-# create a version of f that can only be called 10 times per 3 seconds
-f_lim <- limit_rate(f, rates = list(
-    c(n = 10, period = 3)
-))
+# create a version of f that can only be called 10 times per second
+f_lim <- limit_rate(f, rate(n = 10, period = 1))
 
-
+# time without limiting
 system.time(replicate(11, f()))
 #>    user  system elapsed 
-#>       0       0       0
+#>   0.000   0.000   0.001
 
+# time with limiting
 system.time(replicate(11, f_lim()))
 #>    user  system elapsed 
-#>   0.002   0.000   3.004
+#>   0.002   0.000   1.002
 ```
 
 You can add multiple rates
 
 ``` r
-f_lim <- limit_rate(f, rates = list(
-    c(n = 10, period = .01),
-    c(n = 50, period = .1)
-))
+f_lim <- limit_rate(
+    f, 
+    rate(n = 10, period = .01), 
+    rate(n = 50, period = .1)
+)
 
 timef <- function(n) {
     replicate(n, f_lim())
@@ -39,21 +39,34 @@ timef <- function(n) {
 
 library(microbenchmark)
 microbenchmark(
-    f_lim <- timef(10),
-    f_lim <- timef(11),
-    f_lim <- timef(50),
-    f_lim <- timef(51),
+    do10 = f_lim <- timef(10),
+    do11 = f_lim <- timef(11),
+    do50 = f_lim <- timef(50),
+    do51 = f_lim <- timef(51),
     times = 20L
 )
 #> Unit: milliseconds
-#>                expr        min         lq      mean     median         uq
-#>  f_lim <- timef(10)   3.448922   4.548046   6.68915   6.405786   8.279273
-#>  f_lim <- timef(11)  12.156866  12.636333  14.07767  14.068316  14.782000
-#>  f_lim <- timef(50)  48.748911  49.742735  51.06710  50.414349  52.404456
-#>  f_lim <- timef(51) 104.063934 104.515356 106.07174 106.085464 107.109385
-#>        max neval  cld
-#>   11.82666    20 a   
-#>   17.72554    20  b  
-#>   55.38878    20   c 
-#>  110.03611    20    d
+#>  expr        min         lq       mean     median         uq       max
+#>  do10   3.914986   5.681779   6.649787   6.439666   7.433393  10.26257
+#>  do11  12.289115  12.406203  13.528122  13.230466  14.566590  15.58756
+#>  do50  48.961195  49.347310  50.562922  49.932887  50.863414  55.87466
+#>  do51 104.185447 105.140098 106.377938 106.604095 107.132279 111.72468
+#>  neval  cld
+#>     20 a   
+#>     20  b  
+#>     20   c 
+#>     20    d
 ```
+
+To install:
+-----------
+
+``` r
+devtools::install_github("tarakc02/ratelimitr")
+```
+
+Requirements
+------------
+
+-   R
+-   [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)

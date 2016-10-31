@@ -19,23 +19,23 @@ Use ratelimitr to limit the rate at which functions are called.
 library(ratelimitr)
 f <- function() NULL
 
-# create a version of f that can only be called 10 times per 3 seconds
-f_lim <- limit_rate(f, rates = list(
-    c(n = 10, period = 3)
-))
+# create a version of f that can only be called 10 times per second
+f_lim <- limit_rate(f, rate(n = 10, period = 1))
 
-
+# time without limiting
 system.time(replicate(11, f()))
 
+# time with limiting
 system.time(replicate(11, f_lim()))
 ```
 
 You can add multiple rates
 ```{r ex2}
-f_lim <- limit_rate(f, rates = list(
-    c(n = 10, period = .01),
-    c(n = 50, period = .1)
-))
+f_lim <- limit_rate(
+    f, 
+    rate(n = 10, period = .01), 
+    rate(n = 50, period = .1)
+)
 
 timef <- function(n) {
     replicate(n, f_lim())
@@ -44,10 +44,20 @@ timef <- function(n) {
 
 library(microbenchmark)
 microbenchmark(
-    f_lim <- timef(10),
-    f_lim <- timef(11),
-    f_lim <- timef(50),
-    f_lim <- timef(51),
+    do10 = f_lim <- timef(10),
+    do11 = f_lim <- timef(11),
+    do50 = f_lim <- timef(50),
+    do51 = f_lim <- timef(51),
     times = 20L
 )
 ```
+
+## To install:
+
+```{r install, eval = FALSE}
+devtools::install_github("tarakc02/ratelimitr")
+```
+
+## Requirements
+* R
+* [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
