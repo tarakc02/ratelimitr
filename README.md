@@ -9,10 +9,11 @@ Use ratelimitr to limit the rate at which functions are called.
 library(ratelimitr)
 f <- function() NULL
 
-# create a version of f that can only be called 10 times per .01 seconds
+# create a version of f that can only be called 10 times per 3 seconds
 f_lim <- limit_rate(f, rates = list(
     c(n = 10, period = 3)
 ))
+
 
 system.time(replicate(11, f()))
 #>    user  system elapsed 
@@ -38,20 +39,21 @@ timef <- function(n) {
 
 library(microbenchmark)
 microbenchmark(
-    f_lim <- timef(9),
+    f_lim <- timef(10),
     f_lim <- timef(11),
-    f_lim <- timef(49),
-    f_lim <- timef(51)
+    f_lim <- timef(50),
+    f_lim <- timef(51),
+    times = 20L
 )
 #> Unit: milliseconds
-#>                expr        min         lq       mean     median        uq
-#>   f_lim <- timef(9)   3.363942   4.011565   5.939788   5.385796   7.16680
-#>  f_lim <- timef(11)  12.225299  12.412299  13.678855  13.337286  14.12729
-#>  f_lim <- timef(49)  45.429961  49.197821  50.808944  50.431432  51.94201
-#>  f_lim <- timef(51) 102.654566 105.651198 106.347749 106.376098 107.20456
+#>                expr        min         lq      mean     median         uq
+#>  f_lim <- timef(10)   3.448922   4.548046   6.68915   6.405786   8.279273
+#>  f_lim <- timef(11)  12.156866  12.636333  14.07767  14.068316  14.782000
+#>  f_lim <- timef(50)  48.748911  49.742735  51.06710  50.414349  52.404456
+#>  f_lim <- timef(51) 104.063934 104.515356 106.07174 106.085464 107.109385
 #>        max neval  cld
-#>   12.63568   100 a   
-#>   21.94518   100  b  
-#>   61.86623   100   c 
-#>  109.94926   100    d
+#>   11.82666    20 a   
+#>   17.72554    20  b  
+#>   55.38878    20   c 
+#>  110.03611    20    d
 ```

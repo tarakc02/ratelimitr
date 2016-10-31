@@ -19,10 +19,11 @@ Use ratelimitr to limit the rate at which functions are called.
 library(ratelimitr)
 f <- function() NULL
 
-# create a version of f that can only be called 10 times per .01 seconds
+# create a version of f that can only be called 10 times per 3 seconds
 f_lim <- limit_rate(f, rates = list(
     c(n = 10, period = 3)
 ))
+
 
 system.time(replicate(11, f()))
 
@@ -43,9 +44,10 @@ timef <- function(n) {
 
 library(microbenchmark)
 microbenchmark(
-    f_lim <- timef(9),
+    f_lim <- timef(10),
     f_lim <- timef(11),
-    f_lim <- timef(49),
-    f_lim <- timef(51)
+    f_lim <- timef(50),
+    f_lim <- timef(51),
+    times = 20L
 )
 ```
