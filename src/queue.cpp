@@ -4,6 +4,13 @@ using namespace Rcpp;
 
 typedef std::queue<double> queue; // convenience typedef
 
+void q_push( queue* obj, double x) { obj->push( x ); }
+void q_pop( queue* obj ) { obj->pop( ); }
+
+double q_back(queue *obj){ return obj->back() ; }
+double q_front(queue *obj){ return obj->front() ; }
+
+
 RCPP_MODULE(mod_queue) {
     using namespace Rcpp;
     // expose the class std::queue<double> as "queue" on the R side
@@ -14,11 +21,11 @@ RCPP_MODULE(mod_queue) {
         // exposing member functions
         .method( "size", &queue::size )
         .method( "empty", &queue::empty )
-        .method( "push", &queue::push )
-        .method( "pop", &queue::pop )
+        .method( "push", &q_push )
+        .method( "pop", &q_pop )
 
         // specifically exposing const member functions
-        .const_method( "back", &queue::back )
-        .const_method( "front", &queue::front )
+        .method( "back", &q_back )
+        .method( "front", &q_front )
         ;
 }
