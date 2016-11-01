@@ -15,21 +15,22 @@ f_lim <- limit_rate(f, rate(n = 10, period = 1))
 # time without limiting
 system.time(replicate(11, f()))
 #>    user  system elapsed 
-#>   0.001   0.000   0.000
+#>       0       0       0
 
 # time with limiting
 system.time(replicate(11, f_lim()))
 #>    user  system elapsed 
-#>   0.001   0.000   1.001
+#>    0.00    0.00    1.01
 ```
 
 You can add multiple rates
 
 ``` r
+# see section "limitations" for reasoning behind adding .02 to the periods
 f_lim <- limit_rate(
     f, 
-    rate(n = 10, period = .01), 
-    rate(n = 50, period = .1)
+    rate(n = 10, period = .12), 
+    rate(n = 50, period = 1.02)
 )
 
 # reset function is for convenience. it does not modify the original 
@@ -45,20 +46,27 @@ microbenchmark(
     do11 = f_lim <- timef(11),
     do50 = f_lim <- timef(50),
     do51 = f_lim <- timef(51),
-    times = 20L
-)
+    times = 10L
+) 
 #> Unit: milliseconds
-#>  expr        min         lq       mean     median         uq       max
-#>  do10   3.594345   3.690182   6.162223   5.502054   8.413349  10.02397
-#>  do11  12.290057  12.392184  13.629930  13.116848  14.960611  15.84700
-#>  do50  44.736207  49.716743  51.191375  50.983907  52.783065  56.65859
-#>  do51 103.517197 106.499825 106.685075 106.858432 107.136684 107.72976
-#>  neval  cld
-#>     20 a   
-#>     20  b  
-#>     20   c 
-#>     20    d
+#>  expr         min          lq        mean    median          uq
+#>  do10    2.995833    3.095428    3.373268    3.2701    3.621913
+#>  do11  113.960635  122.012625  123.708249  123.4575  126.680666
+#>  do50  481.293625  486.912000  494.445336  490.5609  503.991403
+#>  do51 1021.917364 1023.542055 1027.716492 1026.0042 1032.439082
+#>          max neval  cld
+#>     3.990262    10 a   
+#>   135.301716    10  b  
+#>   511.796306    10   c 
+#>  1034.910330    10    d
 ```
+
+If you have multiple functions that should collectively be subject to a single rate limit, see the [vignette on limiting multiple functions](https://github.com/tarakc02/ratelimitr/blob/master/vignettes/multi-function.md).
+
+Limitations
+-----------
+
+Rate limiting utilizes `Sys.sleep()` to pause when necessary, and so is constrained to the same time resolution (see `?Sys.sleep`). In many cases, this is good enough, but if you need to make sure you are strictly obeying the limits, you can add a buffer of .02 seconds or so to the `period` (eg instead of 10 calls per second, you might set it up as 10 calls per 1.02 seconds).
 
 To install:
 -----------
