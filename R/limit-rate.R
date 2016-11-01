@@ -1,3 +1,8 @@
+#' Limit the rate at which a function will execute
+#'
+#' @param f The function to be rate-limited
+#' @param ... One or more rates, created using \code{\link{rate}}
+#'
 #' @export
 limit_rate <- function(f, ...) {
     rates <- list(...)
