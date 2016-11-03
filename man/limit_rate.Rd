@@ -4,7 +4,7 @@
 \alias{limit_rate}
 \title{Limit the rate at which a function will execute}
 \usage{
-limit_rate(f, ...)
+limit_rate(f, ..., precision = 60)
 }
 \arguments{
 \item{f}{The function to be rate-limited}

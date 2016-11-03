@@ -49,11 +49,11 @@ microbenchmark(
     times = 10L
 ) 
 #> Unit: milliseconds
-#>  expr        min         lq       mean     median         uq        max
-#>  do10   20.84926   21.12105   26.33994   26.16915   31.54378   32.65489
-#>  do11  120.41504  138.37152  145.07101  147.14811  155.85931  157.23804
-#>  do50  488.20824  497.71106  517.86313  527.89816  532.68777  533.43093
-#>  do51 1027.78964 1032.32912 1045.65367 1046.61243 1054.05154 1062.92562
+#>  expr         min         lq       mean     median         uq        max
+#>  do10    4.691159   31.09181   28.98221   31.26096   32.48802   33.47939
+#>  do11  154.130490  154.65773  155.67734  155.62705  156.21473  158.09788
+#>  do50  523.860443  531.67321  532.99834  532.72940  533.20437  543.76736
+#>  do51 1032.071018 1037.89762 1050.34917 1049.20700 1063.18411 1067.94179
 #>  neval  cld
 #>     10 a   
 #>     10  b  
@@ -74,6 +74,8 @@ To install:
 ``` r
 devtools::install_github("tarakc02/ratelimitr")
 ```
+
+Please note, this package is brand new and still heavily in development. The API will still change, `ratelimitr` should not be considered stable. Please report any bugs or missing features. Thanks!
 
 Requirements
 ------------

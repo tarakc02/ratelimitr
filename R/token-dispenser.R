@@ -43,8 +43,7 @@ token_dispenser <- function(n, period, precision = 60) {
 
         # wait time should be converted back to whole seconds
         time_to_wait <- (token - now) / precision
-        Sys.sleep(time_to_wait)
-        request()
+        signalCondition(rate_limit_exception(time_to_wait))
     }
     structure(request, class = "token_dispenser")
 }
@@ -59,8 +58,14 @@ token_dispenser <- function(n, period, precision = 60) {
 #'
 #' @return TRUE (possibly after a delay)
 #' @export
-request <- function(x) UseMethod("request")
+request <- function(x, policy = wait) UseMethod("request")
 
 #' @export
 #' @rdname request
-request.token_dispenser <- function(x) x()
+request.token_dispenser <- function(x, policy = wait) {
+    tryCatch(
+        x(),
+        rate_limit_exception = function(e) policy(x, e),
+        error = function(e) stop(e$message, call. = FALSE)
+    )
+}

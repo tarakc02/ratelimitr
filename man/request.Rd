@@ -5,9 +5,9 @@
 \alias{request.token_dispenser}
 \title{Request a token from a token dispenser}
 \usage{
-request(x)
+request(x, policy = wait)
 
-\method{request}{token_dispenser}(x)
+\method{request}{token_dispenser}(x, policy = wait)
 }
 \arguments{
 \item{x}{A \code{\link{token_dispenser}}}
