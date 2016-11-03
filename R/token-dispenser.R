@@ -7,30 +7,42 @@
 #'
 #' @param n Number of tokens disbursed in the given time period
 #' @param period Length of period in seconds
+#' @param precision Resolution with which to measure time, in fractions of a second
+#'
+#' @details
+#' In order to guarantee compliance with a rate limit, the token dispenser
+#' by default measures time intervals to the 1/60th of a second, always rounding
+#' down. Use the \code{precision} argument to specify what fraction of a second
+#' to use (60 means 1/60th, 100 means 1/100, etc).
 #'
 #' @import assertthat
 #' @export
-token_dispenser <- function(n, period) {
+token_dispenser <- function(n, period, precision = 60) {
     assert_that(is.number(n))
     assert_that(is.number(period))
 
-    init_time <- as.numeric(Sys.time())
+    # times should be in increments of (1 / precision) of seconds
+    # So period (entered in seconds) is converted to period * precision
+    period <- period * precision
+
+    init_time <- ceiling(as.numeric(Sys.time()) * precision)
 
     tokens <- new(queue)
     replicate(n, tokens$push(init_time))
 
     request <- function() {
-        now <- as.numeric(Sys.time())
         if (tokens$size() != n)
             stop("Unexpected error")
+        now <- floor(as.numeric(Sys.time()) * precision)
         token <- tokens$front()
         if (now >= token) {
             tokens$pop()
-            tokens$push(now + period)
+            tokens$push(now + 1 + period)
             return(TRUE)
         }
 
-        time_to_wait <- token - now
+        # wait time should be converted back to whole seconds
+        time_to_wait <- (token - now) / precision
         Sys.sleep(time_to_wait)
         request()
     }
