@@ -55,6 +55,15 @@ token_dispenser <- function(n, period, precision = 60) {
 #' by the \code{token_dispenser}.
 #'
 #' @param x A \code{\link{token_dispenser}}
+#' @param policy A policy function (see details)
+#'
+#' @details
+#' A \code{policy} function specifies what to do if a function is called whose
+#' execution would violate the rate limit associated with the token dispenser.
+#' Policy functions take two arguments, the token dispenser and a
+#' \code{rate_limit_exception}, which is signalled by the token dispenser. The
+#' default policy, \code{wait}, sleeps for the necessary amount of time and then
+#' resubmits the request.
 #'
 #' @return TRUE (possibly after a delay)
 #' @export
