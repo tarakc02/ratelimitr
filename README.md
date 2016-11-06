@@ -1,14 +1,16 @@
+ratelimitr
+================
 
--   [ratelimitr](#ratelimitr)
+-   [Introduction](#introduction)
 -   [Multiple rates](#multiple-rates)
--   [Multiple functions sharing one rate limit](#multiple-functions-sharing-one-rate-limit)
+-   [Multiple functions sharing one (or more) rate limit(s)](#multiple-functions-sharing-one-or-more-rate-limits)
 -   [Limitations](#limitations)
 -   [Installation](#installation)
 -   [Requirements](#requirements)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-ratelimitr
-----------
+Introduction
+------------
 
 Use ratelimitr to limit the rate at which functions are called. A rate-limited function that allows `n` calls per `period` will never have a window of time of length `period` that includes more than `n` calls.
 
@@ -22,12 +24,12 @@ f_lim <- limit_rate(f, rate(n = 10, period = 1))
 # time without limiting
 system.time(replicate(11, f()))
 #>    user  system elapsed 
-#>   0.000   0.001   0.001
+#>       0       0       0
 
 # time with limiting
 system.time(replicate(11, f_lim()))
 #>    user  system elapsed 
-#>   0.003   0.000   1.021
+#>   0.003   0.000   1.020
 ```
 
 Multiple rates
@@ -45,7 +47,7 @@ f_lim <- limit_rate(
 # 10 calls do not trigger the rate limit
 system.time(replicate(10, f_lim()))
 #>    user  system elapsed 
-#>   0.003   0.000   0.003
+#>   0.002   0.000   0.003
 
 # sleeping in between tests to re-set the rate limit timer
 Sys.sleep(1)
@@ -53,21 +55,21 @@ Sys.sleep(1)
 # 11 function calls do trigger the rate limit
 system.time(replicate(11, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.002   0.000   0.119
+#>   0.004   0.000   0.121
 
 # similarly, 50 calls don't trigger the second rate limit
 system.time(replicate(50, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.029   0.000   0.496
+#>   0.031   0.000   0.499
 
 # but 51 calls do:
 system.time(replicate(51, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.030   0.000   1.015
+#>   0.037   0.000   1.021
 ```
 
-Multiple functions sharing one rate limit
------------------------------------------
+Multiple functions sharing one (or more) rate limit(s)
+------------------------------------------------------
 
 To limit a group of functions together, just pass `limit_rate` a list of functions instead of a single function. Make sure the list is named, the names will be how you access the rate-limited versions of the functions:
 
@@ -94,7 +96,7 @@ system.time(
     {limited$f(); limited$g(); limited$h()}
 )
 #>    user  system elapsed 
-#>   0.000   0.000   0.001
+#>   0.001   0.000   0.000
 
 # sleep in between tests to reset the rate limit timer
 Sys.sleep(1)
@@ -104,7 +106,7 @@ system.time(
     {limited$f(); limited$g(); limited$h(); limited$f()}
 )
 #>    user  system elapsed 
-#>   0.001   0.000   1.019
+#>   0.001   0.001   1.019
 ```
 
 Limitations

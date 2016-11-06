@@ -1,4 +1,5 @@
 ---
+title: ratelimitr
 output: 
     github_document:
         toc: true
@@ -14,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## ratelimitr
+## Introduction
 Use ratelimitr to limit the rate at which functions are called. A rate-limited function that allows `n` calls per `period` will never have a window of time of length `period` that includes more than `n` calls. 
 
 ```{r ex1}
@@ -58,7 +59,7 @@ system.time(replicate(50, f_lim())); Sys.sleep(1)
 system.time(replicate(51, f_lim())); Sys.sleep(1)
 ```
 
-## Multiple functions sharing one rate limit
+## Multiple functions sharing one (or more) rate limit(s)
 
 To limit a group of functions together, just pass `limit_rate` a list of functions instead of a single function. Make sure the list is named, the names will be how you access the rate-limited versions of the functions:
 
