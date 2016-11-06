@@ -2,14 +2,25 @@
 % Please edit documentation in R/limit-rate.R
 \name{limit_rate}
 \alias{limit_rate}
+\alias{limit_rate.function}
+\alias{limit_rate.function_list}
+\alias{limit_rate.list}
 \title{Limit the rate at which a function will execute}
 \usage{
 limit_rate(f, ..., precision = 60)
+
+\method{limit_rate}{list}(f, ..., precision = 60)
+
+\method{limit_rate}{function_list}(f, ..., precision = 60)
+
+\method{limit_rate}{function}(f, ..., precision = 60)
 }
 \arguments{
 \item{f}{The function to be rate-limited}
 
 \item{...}{One or more rates, created using \code{\link{rate}}}
+
+\item{precision}{The precision with which time intervals can be measured}
 }
 \description{
 Limit the rate at which a function will execute

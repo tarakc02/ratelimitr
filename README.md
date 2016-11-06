@@ -1,4 +1,11 @@
 
+-   [ratelimitr](#ratelimitr)
+-   [Multiple rates](#multiple-rates)
+-   [Multiple functions sharing one rate limit](#multiple-functions-sharing-one-rate-limit)
+-   [Limitations](#limitations)
+-   [Installation](#installation)
+-   [Requirements](#requirements)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 ratelimitr
 ----------
@@ -15,61 +22,100 @@ f_lim <- limit_rate(f, rate(n = 10, period = 1))
 # time without limiting
 system.time(replicate(11, f()))
 #>    user  system elapsed 
-#>       0       0       0
+#>   0.000   0.001   0.001
 
 # time with limiting
 system.time(replicate(11, f_lim()))
 #>    user  system elapsed 
-#>    0.00    0.00    1.05
+#>   0.003   0.000   1.021
 ```
 
-You can add multiple rates
+Multiple rates
+--------------
+
+Published rate limits often have multiple types of limits. Here is an example of limiting a function so that it never evaluates more than 10 times per .1 seconds, but additionally never evaluates more than 50 times per 1 second.
 
 ``` r
-# see section "limitations" for reasoning behind adding .02 to the periods
 f_lim <- limit_rate(
     f, 
     rate(n = 10, period = .1), 
     rate(n = 50, period = 1)
 )
 
-# reset function is for convenience. it does not modify the original 
-# rate-limited function, just returns a new one
-timef <- function(n) {
-    replicate(n, f_lim())
-    reset(f_lim)
-}
+# 10 calls do not trigger the rate limit
+system.time(replicate(10, f_lim()))
+#>    user  system elapsed 
+#>   0.003   0.000   0.003
 
-library(microbenchmark)
-microbenchmark(
-    do10 = f_lim <- timef(10),
-    do11 = f_lim <- timef(11),
-    do50 = f_lim <- timef(50),
-    do51 = f_lim <- timef(51),
-    times = 10L
-) 
-#> Unit: milliseconds
-#>  expr         min         lq       mean     median         uq        max
-#>  do10    4.691159   31.09181   28.98221   31.26096   32.48802   33.47939
-#>  do11  154.130490  154.65773  155.67734  155.62705  156.21473  158.09788
-#>  do50  523.860443  531.67321  532.99834  532.72940  533.20437  543.76736
-#>  do51 1032.071018 1037.89762 1050.34917 1049.20700 1063.18411 1067.94179
-#>  neval  cld
-#>     10 a   
-#>     10  b  
-#>     10   c 
-#>     10    d
+# sleeping in between tests to re-set the rate limit timer
+Sys.sleep(1)
+
+# 11 function calls do trigger the rate limit
+system.time(replicate(11, f_lim())); Sys.sleep(1)
+#>    user  system elapsed 
+#>   0.002   0.000   0.119
+
+# similarly, 50 calls don't trigger the second rate limit
+system.time(replicate(50, f_lim())); Sys.sleep(1)
+#>    user  system elapsed 
+#>   0.029   0.000   0.496
+
+# but 51 calls do:
+system.time(replicate(51, f_lim())); Sys.sleep(1)
+#>    user  system elapsed 
+#>   0.030   0.000   1.015
 ```
 
-If you have multiple functions that should collectively be subject to a single rate limit, see the [vignette on limiting multiple functions](https://github.com/tarakc02/ratelimitr/blob/master/vignettes/multi-function.md).
+Multiple functions sharing one rate limit
+-----------------------------------------
+
+To limit a group of functions together, just pass `limit_rate` a list of functions instead of a single function. Make sure the list is named, the names will be how you access the rate-limited versions of the functions:
+
+``` r
+f <- function() 1
+g <- function() 2
+h <- function() 3
+
+# passing a named list to limit_rate
+limited <- limit_rate(list(f = f, g = g, h = h), rate(n = 3, period = 1))
+
+# now limited is a list of functions that share a rate limit. examples:
+limited$f()
+#> [1] 1
+limited$g()
+#> [1] 2
+```
+
+The new functions are subject to a single rate limit, regardless of which ones are called or in what order they are called.
+
+``` r
+# the first three function calls should not trigger a delay
+system.time(
+    {limited$f(); limited$g(); limited$h()}
+)
+#>    user  system elapsed 
+#>   0.000   0.000   0.001
+
+# sleep in between tests to reset the rate limit timer
+Sys.sleep(1)
+
+# but to evaluate a fourth function call, there will be a delay
+system.time(
+    {limited$f(); limited$g(); limited$h(); limited$f()}
+)
+#>    user  system elapsed 
+#>   0.001   0.000   1.019
+```
 
 Limitations
 -----------
 
-The precision with which you can measure the length of time that has elapsed between two events is constrained to some degree, dependent on your operating system. In order to guarantee compliance with rate limits, this package truncates the time (specifically taking the ceiling or the floor based on which would give the most conservative estimate of elapsed time), rounding to the fraction specified in the `precision` argument of `token_dispenser` -- the default is 60, meaning time measurements are taken up to the 1/60th of a second. While the conservative measurements of elapsed time make it impossible to overrun the rate limit by a tiny fraction of a second (see [Issue 3](https://github.com/tarakc02/ratelimitr/issues/3)), they also will result in waiting times that are slightly longer than necessary (using the default `precision` of 60, waiting times will be .01-.03 seconds longer than necessary) .
+`limit_rate` is not safe to use in parallel.
 
-To install:
------------
+The precision with which you can measure the length of time that has elapsed between two events is constrained to some degree, dependent on your operating system. In order to guarantee compliance with rate limits, this package truncates the time (specifically taking the ceiling or the floor based on which would give the most conservative estimate of elapsed time), rounding to the fraction specified in the `precision` argument of `token_dispenser` -- the default is 60, meaning time measurements are taken up to the 1/60th of a second. While the conservative measurements of elapsed time make it impossible to overrun the rate limit by a tiny fraction of a second (see [Issue 3](https://github.com/tarakc02/ratelimitr/issues/3)), they also will result in waiting times that are slightly longer than necessary (using the default `precision` of 60, waiting times will be .01-.03 seconds longer than necessary).
+
+Installation
+------------
 
 ``` r
 devtools::install_github("tarakc02/ratelimitr")
