@@ -18,7 +18,7 @@
 #' @import assertthat
 #' @export
 token_dispenser <- function(n, period, precision = 60) {
-    assert_that(is.number(n))
+    assert_that(is.count(n))
     assert_that(is.number(period))
 
     # times should be in increments of (1 / precision) of seconds
@@ -27,17 +27,15 @@ token_dispenser <- function(n, period, precision = 60) {
 
     init_time <- ceiling(as.numeric(Sys.time()) * precision)
 
-    tokens <- new(queue)
-    replicate(n, tokens$push(init_time))
+    tokens <- fixed_queue(n)
+    replicate(n, push(tokens, init_time))
 
     request <- function() {
-        if (tokens$size() != n)
-            stop("Unexpected error")
         now <- floor(as.numeric(Sys.time()) * precision)
-        token <- tokens$front()
+        token <- front(tokens)
         if (now >= token) {
-            tokens$pop()
-            tokens$push(now + 1 + period)
+            pop(tokens)
+            push(tokens, now + 1 + period)
             return(TRUE)
         }
 
