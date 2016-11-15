@@ -18,6 +18,10 @@
 #' @import assertthat
 #' @export
 token_dispenser <- function(n, period, precision = 60) {
+    # a constant to keep events from happening too close to the limit
+    # (in 1 / precision seconds)
+    buffer <- 1
+
     assert_that(is.count(n))
     assert_that(is.number(period))
 
@@ -33,9 +37,9 @@ token_dispenser <- function(n, period, precision = 60) {
     request <- function() {
         now <- floor(as.numeric(Sys.time()) * precision)
         token <- front(tokens)
-        if (now >= token) {
+        if (now > token) {
             pop(tokens)
-            push(tokens, now + 1 + period)
+            push(tokens, ceiling(as.numeric(Sys.time()) * precision) + period + buffer)
             return(TRUE)
         }
 
