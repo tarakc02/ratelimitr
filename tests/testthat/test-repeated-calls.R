@@ -5,6 +5,7 @@ test_that("rates are consistently obeyed", {
     f_lim <- limit_rate(f, rate(n = 10, period = .1))
 
     logger <- function() {
+        Sys.sleep(.1)
         system.time(replicate(11, f_lim()))[["elapsed"]]
     }
 
