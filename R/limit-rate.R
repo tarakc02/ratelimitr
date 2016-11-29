@@ -52,7 +52,8 @@ limit_rate.function_list <- function(f, ..., precision = 60) {
             precision = precision,
             class = c("rate_limited_function", class(f)))
 
-    lapply(f, build_function)
+    new_functions <- lapply(f, build_function)
+    structure(new_functions, class = c("limited_function_list", "function_list"))
 }
 
 #' @rdname limit_rate
@@ -74,9 +75,22 @@ limit_rate.function <- function(f, ..., precision = 60) {
 reset <- function(f) UseMethod("reset")
 
 #' @export
-reset.rate_limited_function <- function(f)
-    limit_rate_(attr(f, "func"), rates = attr(f, "rates"),
-                precision = attr(f, "precision"))
+reset.rate_limited_function <- function(f) {
+    func <- attr(f, "func")
+    rates <- attr(f, "rates")
+    precision <- attr(f, "precision")
+    lim <- function(...) {
+        limit_rate(func, ..., precision = precision)
+    }
+    do.call("lim", rates)
+}
+
+#' @export
+reset.limited_function_list <- function(f) {
+    new_functions <- lapply(f, reset)
+    structure(new_functions,
+              class = c("limited_function_list", "function_list"))
+}
 
 #' @export
 print.rate_limited_function <- function(f) {
@@ -92,4 +106,21 @@ print.rate_limited_function <- function(f) {
     lapply(rates, catrate)
     print(func)
     invisible(f)
+}
+
+#' @export
+print.limited_function_list <- function(flist) {
+    rates <- attr(flist[[1]], "rates")
+    precision <- attr(flist[[1]], "precision")
+
+    catrate <- function(rate) {
+        cat("    ", rate[["n"]], "calls per", rate[["period"]], "seconds\n")
+    }
+
+    cat("A rate limited group of functions, with rates (within 1/",
+        precision, " seconds):\n", sep = "")
+    lapply(rates, catrate)
+
+    lapply(flist, function(f) print(attr(f, "func")))
+
 }
