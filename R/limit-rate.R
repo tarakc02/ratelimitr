@@ -22,8 +22,6 @@ check_rates <- function(rates) {
 #' @rdname limit_rate
 #' @export
 limit_rate.list <- function(f, ..., precision = 60) {
-    rates <- list(...)
-    check_rates(rates)
     flist <- do.call(function_list, f)
     limit_rate.function_list(flist, ..., precision = 60)
 }
