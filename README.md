@@ -24,12 +24,12 @@ f_lim <- limit_rate(f, rate(n = 10, period = 1))
 # time without limiting
 system.time(replicate(11, f()))
 #>    user  system elapsed 
-#>       0       0       0
+#>   0.000   0.000   0.001
 
 # time with limiting
 system.time(replicate(11, f_lim()))
 #>    user  system elapsed 
-#>   0.003   0.000   1.020
+#>   0.002   0.000   1.020
 ```
 
 Multiple rates
@@ -47,7 +47,7 @@ f_lim <- limit_rate(
 # 10 calls do not trigger the rate limit
 system.time(replicate(10, f_lim()))
 #>    user  system elapsed 
-#>   0.002   0.000   0.003
+#>   0.003   0.000   0.003
 
 # sleeping in between tests to re-set the rate limit timer
 Sys.sleep(1)
@@ -55,17 +55,17 @@ Sys.sleep(1)
 # 11 function calls do trigger the rate limit
 system.time(replicate(11, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.004   0.000   0.121
+#>   0.004   0.000   0.120
 
 # similarly, 50 calls don't trigger the second rate limit
 system.time(replicate(50, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.031   0.000   0.499
+#>   0.027   0.000   0.494
 
 # but 51 calls do:
 system.time(replicate(51, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.037   0.000   1.021
+#>   0.037   0.000   1.022
 ```
 
 Multiple functions sharing one (or more) rate limit(s)
@@ -106,7 +106,7 @@ system.time(
     {limited$f(); limited$g(); limited$h(); limited$f()}
 )
 #>    user  system elapsed 
-#>   0.001   0.001   1.019
+#>   0.001   0.000   1.019
 ```
 
 Limitations
@@ -129,4 +129,3 @@ Requirements
 ------------
 
 -   R
--   [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
