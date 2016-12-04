@@ -4,7 +4,7 @@ Title: Rate Limiting for R
 Version: 0.3.3.9000
 Author: Tarak Shah
 Maintainer: Tarak Shah <tarak_shah@berkeley.edu>
-Description: Limit the number of times a function can be called in a given timespan
+Description: The ratelimitr package allows you to limit the rate at which one or more functions can be called.
 License: MIT + file LICENSE
 LazyData: TRUE
 RoxygenNote: 5.0.1

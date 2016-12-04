@@ -93,7 +93,8 @@ reset.limited_function_list <- function(f) {
 }
 
 #' @export
-print.rate_limited_function <- function(f) {
+print.rate_limited_function <- function(x, ...) {
+    f <- x
     rates <- attr(f, "rates")
     func <- attr(f, "func")
     precision <- attr(f, "precision")
@@ -109,7 +110,8 @@ print.rate_limited_function <- function(f) {
 }
 
 #' @export
-print.limited_function_list <- function(flist) {
+print.limited_function_list <- function(x, ...) {
+    flist <- x
     rates <- attr(flist[[1]], "rates")
     precision <- attr(flist[[1]], "precision")
 
@@ -122,5 +124,6 @@ print.limited_function_list <- function(flist) {
     lapply(rates, catrate)
 
     lapply(flist, function(f) print(attr(f, "func")))
+    invisible(x)
 
 }
