@@ -31,8 +31,10 @@ token_dispenser <- function(n, period, precision = 60) {
     structure(request, class = "token_dispenser")
 }
 
+#' @export
 request <- function(x, policy = wait) UseMethod("request")
 
+#' @export
 request.token_dispenser <- function(x, policy = wait) {
     tryCatch(
         x(),

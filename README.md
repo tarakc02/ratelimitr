@@ -6,7 +6,6 @@ ratelimitr
 -   [Multiple functions sharing one (or more) rate limit(s)](#multiple-functions-sharing-one-or-more-rate-limits)
 -   [Limitations](#limitations)
 -   [Installation](#installation)
--   [Requirements](#requirements)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 Introduction
@@ -24,12 +23,12 @@ f_lim <- limit_rate(f, rate(n = 10, period = 1))
 # time without limiting
 system.time(replicate(11, f()))
 #>    user  system elapsed 
-#>   0.000   0.000   0.001
+#>       0       0       0
 
 # time with limiting
 system.time(replicate(11, f_lim()))
 #>    user  system elapsed 
-#>   0.002   0.000   1.020
+#>    0.00    0.00    1.05
 ```
 
 Multiple rates
@@ -47,7 +46,7 @@ f_lim <- limit_rate(
 # 10 calls do not trigger the rate limit
 system.time(replicate(10, f_lim()))
 #>    user  system elapsed 
-#>   0.003   0.000   0.003
+#>       0       0       0
 
 # sleeping in between tests to re-set the rate limit timer
 Sys.sleep(1)
@@ -55,17 +54,17 @@ Sys.sleep(1)
 # 11 function calls do trigger the rate limit
 system.time(replicate(11, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.004   0.000   0.120
+#>    0.00    0.00    0.14
 
 # similarly, 50 calls don't trigger the second rate limit
 system.time(replicate(50, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.027   0.000   0.494
+#>    0.03    0.00    0.60
 
 # but 51 calls do:
 system.time(replicate(51, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.037   0.000   1.022
+#>    0.13    0.02    1.06
 ```
 
 Multiple functions sharing one (or more) rate limit(s)
@@ -96,7 +95,7 @@ system.time(
     {limited$f(); limited$g(); limited$h()}
 )
 #>    user  system elapsed 
-#>   0.001   0.000   0.000
+#>       0       0       0
 
 # sleep in between tests to reset the rate limit timer
 Sys.sleep(1)
@@ -106,7 +105,7 @@ system.time(
     {limited$f(); limited$g(); limited$h(); limited$f()}
 )
 #>    user  system elapsed 
-#>   0.001   0.000   1.019
+#>    0.01    0.00    1.04
 ```
 
 Limitations
@@ -124,8 +123,3 @@ devtools::install_github("tarakc02/ratelimitr")
 ```
 
 Please note, this package is brand new and still heavily in development. The API will still change, `ratelimitr` should not be considered stable. Please report any bugs or missing features. Thanks!
-
-Requirements
-------------
-
--   R

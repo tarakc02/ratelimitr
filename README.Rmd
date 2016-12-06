@@ -110,6 +110,3 @@ devtools::install_github("tarakc02/ratelimitr")
 ```
 
 Please note, this package is brand new and still heavily in development. The API will still change, `ratelimitr` should not be considered stable. Please report any bugs or missing features. Thanks!
-
-## Requirements
-* R
