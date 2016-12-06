@@ -16,13 +16,33 @@ limit_rate(f, ..., precision = 60)
 \method{limit_rate}{function}(f, ..., precision = 60)
 }
 \arguments{
-\item{f}{The function to be rate-limited}
+\item{f}{A single function to be rate-limited, or a named list of functions}
 
 \item{...}{One or more rates, created using \code{\link{rate}}}
 
-\item{precision}{The precision with which time intervals can be measured}
+\item{precision}{The precision with which time intervals can be measured, in hertz}
+}
+\value{
+If \code{f} is a single function, then a new function with the same
+signature and (eventual) behavior as the original function, but rate limited.
+If \code{f} is a named list of functions, then a new list of functions with the
+same names and signatures, but collectively bound by a shared rate limit.
 }
 \description{
 Limit the rate at which a function will execute
+}
+\examples{
+## limiting a single function
+f <- limit_rate(Sys.time, rate(n = 5, period = .1))
+res <- replicate(10, f())
+## show the elapsed time between each function call:
+res[-1] - head(res, -1)
+
+## for multiple functions, make sure the list is named:
+f <- function() 1
+g <- function() 2
+limited <- limit_rate(list(f = f, g = g), rate(n = 1, period = .1))
+system.time({limited$f(); limited$g()})
+
 }
 

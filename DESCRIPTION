@@ -8,8 +8,5 @@ Description: The ratelimitr package allows you to limit the rate at which one or
 License: MIT + file LICENSE
 LazyData: TRUE
 RoxygenNote: 5.0.1
-Suggests: testthat,
-    knitr,
-    rmarkdown
-VignetteBuilder: knitr
+Suggests: testthat
 Imports: assertthat
