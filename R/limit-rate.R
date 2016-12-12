@@ -68,7 +68,7 @@ limit_rate.function_list <- function(f, ..., precision = 60) {
             func = fun,
             rates = rates,
             precision = precision,
-            class = c("rate_limited_function", class(f)))
+            class = c("rate_limited_function", class(fun)))
 
     new_functions <- lapply(f, build_function)
     structure(new_functions, class = c("limited_function_list", "function_list"))
