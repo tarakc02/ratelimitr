@@ -22,4 +22,7 @@ f <- function() NULL
 limited_f <- limit_rate(f, rate(n = 10, period = 1))
 
 }
+\seealso{
+\code{\link{limit_rate}}
+}
 
