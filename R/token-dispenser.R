@@ -1,8 +1,4 @@
 token_dispenser <- function(n, period, precision = 60) {
-    # a constant to keep events from happening too close to the limit
-    # (in 1 / precision seconds)
-    buffer <- 1
-
     assert_that(is.count(n))
     assert_that(is.number(period))
 
@@ -20,7 +16,7 @@ token_dispenser <- function(n, period, precision = 60) {
         token <- front(tokens)
         if (now > token) {
             pop(tokens)
-            push(tokens, ceiling(as.numeric(Sys.time()) * precision) + period + buffer)
+            push(tokens, ceiling(as.numeric(Sys.time()) * precision) + period)
             return(TRUE)
         }
 
