@@ -1,5 +1,12 @@
 context("main")
 
+timer <- function(expr) {
+    start <- microbenchmark::get_nanotime()
+    x <- force(expr)
+    end <- microbenchmark::get_nanotime()
+    (end - start) / 1E9
+}
+
 test_that("rate limited function does not exceed limits", {
     f <- function() NULL
 
@@ -10,7 +17,7 @@ test_that("rate limited function does not exceed limits", {
         precision = 60
     )
 
-    time11 <- system.time(replicate(11, f_lim()))[["elapsed"]]
+    time11 <- timer(replicate(11, f_lim()))
     expect_gt(time11, .05)
 
     f_lim <- limit_rate(
@@ -20,8 +27,8 @@ test_that("rate limited function does not exceed limits", {
         precision = 60
     )
 
-    time51 <- system.time(replicate(41, f_lim()))[["elapsed"]]
-    expect_gt(time51, .5)
+    time41 <- timer(replicate(41, f_lim()))
+    expect_gt(time41, .5)
 })
 
 test_that("rate-limited groups of functions obey rate limits", {
@@ -29,9 +36,9 @@ test_that("rate-limited groups of functions obey rate limits", {
     g <- function() NULL
 
     limited <- limit_rate(list(f = f, g = g), rate(n = 2, period = .1))
-    evaltime <- system.time(
+    evaltime <- timer(
         {limited$f(); limited$g(); limited$f()}
-    )[["elapsed"]]
+    )
 
     expect_gt(evaltime, .1)
 })

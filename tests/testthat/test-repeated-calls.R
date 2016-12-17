@@ -4,12 +4,14 @@ test_that("rates are consistently obeyed", {
     f <- function() NULL
     f_lim <- limit_rate(f, rate(n = 10, period = .03))
 
-    logger <- function() {
-        f_lim <- reset(f_lim)
-        system.time(replicate(11, f_lim()))[["elapsed"]]
+    timer <- function() {
+        start <- microbenchmark::get_nanotime()
+        replicate(11, f_lim())
+        end <- microbenchmark::get_nanotime()
+        (end - start) / 1E9
     }
 
-    res <- replicate(20, logger())
+    res <- replicate(20, timer())
 
     expect_false(any(res <= .03))
 })
