@@ -8,6 +8,7 @@ test_that("rates are consistently obeyed", {
         start <- microbenchmark::get_nanotime()
         replicate(11, f_lim())
         end <- microbenchmark::get_nanotime()
+        f_lim <- reset(f_lim)
         (end - start) / 1E9
     }
 
