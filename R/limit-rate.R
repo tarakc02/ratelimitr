@@ -107,9 +107,18 @@ reset.rate_limited_function <- function(f) {
 
 #' @export
 reset.limited_function_list <- function(f) {
-    new_functions <- lapply(f, reset)
-    structure(new_functions,
-              class = c("limited_function_list", "function_list"))
+    funcs <- lapply(
+        f,
+        function(fun) attr(fun, "func")
+    )
+    names(funcs) <- names(f)
+    rates <- attr(f[[1]], "rates")
+    precision <- attr(f[[1]], "precision")
+    lim <- function(...) {
+        limit_rate(funcs, ..., precision = precision)
+    }
+
+    do.call("lim", rates)
 }
 
 #' @export
