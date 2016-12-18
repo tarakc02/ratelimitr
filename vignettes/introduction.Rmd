@@ -1,6 +1,6 @@
 ---
 title: "Introduction to ratelimitr"
-author: "Vignette Author"
+author: "Tarak Shah"
 date: "`r Sys.Date()`"
 output: 
     rmarkdown::html_vignette:
@@ -89,7 +89,7 @@ system.time(
     {limited$f(); limited$g(); limited$h()}
 )
 
-Sys.sleep(1)
+limited <- reset(limited)
 
 # but to evaluate a fourth function call, there will be a delay
 system.time({
