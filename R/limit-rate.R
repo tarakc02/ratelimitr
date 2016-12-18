@@ -82,45 +82,6 @@ limit_rate.function <- function(f, ..., precision = 60) {
     limit_rate(list(f = f), ..., precision = precision)[["f"]]
 }
 
-#' Re-create a rate-limited function
-#'
-#' This function does not modify the original rate-limited function, instead
-#' it returns a new function with the same rate limits (but no memory of prior
-#' function calls).
-#'
-#' @param f A rate-limited functoin
-#'
-#' @name reset
-#' @export
-reset <- function(f) UseMethod("reset")
-
-#' @export
-reset.rate_limited_function <- function(f) {
-    func <- attr(f, "func")
-    rates <- attr(f, "rates")
-    precision <- attr(f, "precision")
-    lim <- function(...) {
-        limit_rate(func, ..., precision = precision)
-    }
-    do.call("lim", rates)
-}
-
-#' @export
-reset.limited_function_list <- function(f) {
-    funcs <- lapply(
-        f,
-        function(fun) attr(fun, "func")
-    )
-    names(funcs) <- names(f)
-    rates <- attr(f[[1]], "rates")
-    precision <- attr(f[[1]], "precision")
-    lim <- function(...) {
-        limit_rate(funcs, ..., precision = precision)
-    }
-
-    do.call("lim", rates)
-}
-
 #' @export
 print.rate_limited_function <- function(x, ...) {
     f <- x
