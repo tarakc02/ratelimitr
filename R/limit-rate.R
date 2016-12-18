@@ -59,18 +59,27 @@ limit_rate.function_list <- function(f, ..., precision = 60) {
             precision = precision)
     )
 
-    build_function <- function(fun)
+    build_function <- function(fun) {
+        newfun <- function(...) {
+            nf <- c(
+                quote(fun),
+                as.list(match.call())[-1]
+            )
+            is_good <- vapply(gatekeepers, request,
+                              FUN.VALUE = logical(1), policy = wait)
+            if (all(is_good)) return(eval(as.call(nf)))
+            stop("Unexpected error")
+        }
+        formals(newfun) <- formals(args(fun))
+
         structure(
-            function(...) {
-                is_good <- vapply(gatekeepers, request,
-                                  FUN.VALUE = logical(1), policy = wait)
-                if (all(is_good)) return(fun(...))
-                stop("Unexpected error")
-            },
+            newfun,
             func = fun,
             rates = rates,
             precision = precision,
-            class = c("rate_limited_function", class(fun)))
+            class = c("rate_limited_function", class(fun))
+        )
+    }
 
     new_functions <- lapply(f, build_function)
     structure(new_functions, class = c("limited_function_list", "function_list"))
