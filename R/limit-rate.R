@@ -61,9 +61,14 @@ limit_rate.function_list <- function(f, ..., precision = 60) {
 
     build_function <- function(fun) {
         newfun <- function(...) {
+            args <- as.list(match.call())[-1]
+            args <- lapply(
+                args,
+                eval, envir = parent.frame()
+            )
             nf <- c(
                 quote(fun),
-                as.list(match.call())[-1]
+                args
             )
             is_good <- vapply(gatekeepers, request,
                               FUN.VALUE = logical(1), policy = wait)
