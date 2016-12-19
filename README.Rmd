@@ -1,11 +1,11 @@
 ---
 title: ratelimitr
 output: 
-    github_document:
-        toc: true
+    github_document
 ---
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+[![Travis-CI Build Status](https://travis-ci.org/tarakc02/ratelimitr.svg?branch=master)](https://travis-ci.org/tarakc02/ratelimitr)
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
@@ -105,8 +105,7 @@ The precision with which you can measure the length of time that has elapsed bet
 
 ## Installation
 
+This package is not yet on CRAN. Install from github using devtools:
 ```{r install, eval = FALSE}
 devtools::install_github("tarakc02/ratelimitr")
 ```
-
-Please note, this package is brand new and still heavily in development. The API will still change, `ratelimitr` should not be considered stable. Please report any bugs or missing features. Thanks!

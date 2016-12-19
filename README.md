@@ -1,13 +1,9 @@
 ratelimitr
 ================
 
--   [Introduction](#introduction)
--   [Multiple rates](#multiple-rates)
--   [Multiple functions sharing one (or more) rate limit(s)](#multiple-functions-sharing-one-or-more-rate-limits)
--   [Limitations](#limitations)
--   [Installation](#installation)
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Travis-CI Build Status](https://travis-ci.org/tarakc02/ratelimitr.svg?branch=master)](https://travis-ci.org/tarakc02/ratelimitr)
+
 Introduction
 ------------
 
@@ -28,7 +24,7 @@ system.time(replicate(11, f()))
 # time with limiting
 system.time(replicate(11, f_lim()))
 #>    user  system elapsed 
-#>    0.00    0.00    1.05
+#>   0.002   0.004   1.024
 ```
 
 Multiple rates
@@ -46,7 +42,7 @@ f_lim <- limit_rate(
 # 10 calls do not trigger the rate limit
 system.time(replicate(10, f_lim()))
 #>    user  system elapsed 
-#>       0       0       0
+#>   0.002   0.000   0.002
 
 # sleeping in between tests to re-set the rate limit timer
 Sys.sleep(1)
@@ -54,17 +50,17 @@ Sys.sleep(1)
 # 11 function calls do trigger the rate limit
 system.time(replicate(11, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>    0.00    0.00    0.14
+#>   0.011   0.000   0.128
 
 # similarly, 50 calls don't trigger the second rate limit
 system.time(replicate(50, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>    0.03    0.00    0.60
+#>   0.052   0.004   0.525
 
 # but 51 calls do:
 system.time(replicate(51, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>    0.13    0.02    1.06
+#>   0.086   0.000   1.025
 ```
 
 Multiple functions sharing one (or more) rate limit(s)
@@ -95,7 +91,7 @@ system.time(
     {limited$f(); limited$g(); limited$h()}
 )
 #>    user  system elapsed 
-#>       0       0       0
+#>   0.001   0.000   0.001
 
 # sleep in between tests to reset the rate limit timer
 Sys.sleep(1)
@@ -105,7 +101,7 @@ system.time(
     {limited$f(); limited$g(); limited$h(); limited$f()}
 )
 #>    user  system elapsed 
-#>    0.01    0.00    1.04
+#>   0.010   0.000   1.027
 ```
 
 Limitations
@@ -118,8 +114,8 @@ The precision with which you can measure the length of time that has elapsed bet
 Installation
 ------------
 
+This package is not yet on CRAN. Install from github using devtools:
+
 ``` r
 devtools::install_github("tarakc02/ratelimitr")
 ```
-
-Please note, this package is brand new and still heavily in development. The API will still change, `ratelimitr` should not be considered stable. Please report any bugs or missing features. Thanks!
