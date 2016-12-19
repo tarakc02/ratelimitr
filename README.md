@@ -2,7 +2,7 @@ ratelimitr
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis-CI Build Status](https://travis-ci.org/tarakc02/ratelimitr.svg?branch=master)](https://travis-ci.org/tarakc02/ratelimitr)
+[![Travis-CI Build Status](https://travis-ci.org/tarakc02/ratelimitr.svg?branch=master)](https://travis-ci.org/tarakc02/ratelimitr) [![Coverage Status](https://img.shields.io/codecov/c/github/tarakc02/ratelimitr/master.svg)](https://codecov.io/github/tarakc02/ratelimitr?branch=master)
 
 Introduction
 ------------
@@ -24,7 +24,7 @@ system.time(replicate(11, f()))
 # time with limiting
 system.time(replicate(11, f_lim()))
 #>    user  system elapsed 
-#>   0.002   0.004   1.024
+#>   0.007   0.000   1.025
 ```
 
 Multiple rates
@@ -50,17 +50,17 @@ Sys.sleep(1)
 # 11 function calls do trigger the rate limit
 system.time(replicate(11, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.011   0.000   0.128
+#>   0.009   0.004   0.130
 
 # similarly, 50 calls don't trigger the second rate limit
 system.time(replicate(50, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.052   0.004   0.525
+#>   0.060   0.000   0.527
 
 # but 51 calls do:
 system.time(replicate(51, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.086   0.000   1.025
+#>   0.082   0.007   1.025
 ```
 
 Multiple functions sharing one (or more) rate limit(s)
@@ -91,7 +91,7 @@ system.time(
     {limited$f(); limited$g(); limited$h()}
 )
 #>    user  system elapsed 
-#>   0.001   0.000   0.001
+#>   0.001   0.000   0.000
 
 # sleep in between tests to reset the rate limit timer
 Sys.sleep(1)
@@ -101,7 +101,7 @@ system.time(
     {limited$f(); limited$g(); limited$h(); limited$f()}
 )
 #>    user  system elapsed 
-#>   0.010   0.000   1.027
+#>   0.009   0.000   1.026
 ```
 
 Limitations

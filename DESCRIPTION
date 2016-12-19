@@ -11,6 +11,7 @@ RoxygenNote: 5.0.1
 Suggests: testthat,
     microbenchmark,
     knitr,
-    rmarkdown
+    rmarkdown,
+    covr
 Imports: assertthat
 VignetteBuilder: knitr
