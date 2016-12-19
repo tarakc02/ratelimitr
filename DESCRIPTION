@@ -1,7 +1,7 @@
 Package: ratelimitr
 Type: Package
 Title: Rate Limiting for R
-Version: 0.3.5.9001
+Version: 0.3.6
 Author: Tarak Shah
 Maintainer: Tarak Shah <tarak_shah@berkeley.edu>
 Description: The ratelimitr package allows you to limit the rate at which one or more functions can be called.
