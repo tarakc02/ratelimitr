@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Re-worded the DESCRIPTION title from "The ratelimitr package allows you to . . ." to "Allows to . . ."
+
 ## Test environments
 * ubuntu 14.04, R 3.3.2
 * ubuntu 12.04 (on travis-ci), R 3.3.1
