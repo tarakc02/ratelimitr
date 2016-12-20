@@ -4,7 +4,7 @@ output:
     github_document
 ---
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ratelimitr)](https://cran.r-project.org/package=ratelimitr)
 [![Travis-CI Build Status](https://travis-ci.org/tarakc02/ratelimitr.svg?branch=master)](https://travis-ci.org/tarakc02/ratelimitr)
 [![Coverage Status](https://img.shields.io/codecov/c/github/tarakc02/ratelimitr/master.svg)](https://codecov.io/github/tarakc02/ratelimitr?branch=master)
 
