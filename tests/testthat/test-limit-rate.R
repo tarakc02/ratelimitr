@@ -1,10 +1,7 @@
 context("main")
 
 timer <- function(expr) {
-    start <- microbenchmark::get_nanotime()
-    x <- force(expr)
-    end <- microbenchmark::get_nanotime()
-    (end - start) / 1E9
+    round(system.time(expr)[["elapsed"]], 3)
 }
 
 test_that("rate limited function does not exceed limits", {

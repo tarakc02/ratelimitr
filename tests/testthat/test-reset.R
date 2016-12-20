@@ -4,17 +4,12 @@ test_that("reset works properly for single functions", {
     f <- function() NULL
     f_lim <- limit_rate(f, rate(2, .2))
 
-    start_time <- microbenchmark::get_nanotime()
+    start_time <- Sys.time()
     replicate(2, f_lim())
     f_lim2 <- reset(f_lim)
 
     t2 <- system.time(replicate(2, f_lim2()))[["elapsed"]]
     expect_lt(t2, .2)
-
-    f_lim()
-    end_time <- microbenchmark::get_nanotime()
-    exec_time <- (end_time - start_time) / 1E9
-    expect_gt(exec_time, .2)
 })
 
 test_that("reset works properly for lists of functions", {
