@@ -15,3 +15,5 @@ Suggests: testthat,
     covr
 Imports: assertthat
 VignetteBuilder: knitr
+URL: https://github.com/tarakc02/ratelimitr
+BugReports: https://github.com/tarakc02/ratelimitr/issues
