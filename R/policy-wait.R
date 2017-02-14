@@ -1,4 +1,8 @@
 wait <- function(tokens, exception) {
-    Sys.sleep(exception$wait_time)
+    pause(exception$wait_time)
     request(tokens, policy = wait)
+}
+
+pause <- function(wait_time) {
+    Sys.sleep(wait_time + .001)
 }

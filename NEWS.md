@@ -1,3 +1,5 @@
+* Due to inherent imprecision of `Sys.sleep`, there were rare occasions where rate-limited functions displayed unexpected and wrong behavior (see #12 and #13). In order to fix the problem, rate-limited functions now wait at least .001 seconds longer than necessary.
+
 # ratelimitr 0.3.7
 
 * Edit unit tests so that tests relying on microbenchmark ("Suggests") are conditional on microbenchmark's presence
