@@ -1,5 +1,4 @@
 time_now <- function()
-    #as.numeric(Sys.time())
     proc.time()[["elapsed"]]
 
 token_dispenser <- function(n, period, precision = 60) {
