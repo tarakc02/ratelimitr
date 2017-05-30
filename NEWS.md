@@ -1,5 +1,5 @@
-* Due to inherent imprecision of `Sys.sleep`, there were rare occasions where rate-limited functions displayed unexpected and wrong behavior (see #12 and #13). In order to fix the problem, rate-limited functions now wait at least .001 seconds longer than necessary.
-* Use `proc.time` instead of `Sys.time` to measure time.  
+* Due to inherent imprecision of `Sys.sleep`, there were rare occasions where rate-limited functions displayed unexpected and wrong behavior (see #12 and #13). In order to fix the problem, rate-limited functions now wait at least .02 seconds longer than necessary.
+* Use `proc.time` instead of `Sys.time` to measure time (for increased precision).
 
 # ratelimitr 0.3.7
 

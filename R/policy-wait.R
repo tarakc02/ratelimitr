@@ -4,5 +4,5 @@ wait <- function(tokens, exception) {
 }
 
 pause <- function(wait_time) {
-    Sys.sleep(wait_time + .001)
+    Sys.sleep(wait_time + .02)
 }
