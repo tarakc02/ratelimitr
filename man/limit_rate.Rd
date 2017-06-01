@@ -2,9 +2,9 @@
 % Please edit documentation in R/limit-rate.R
 \name{limit_rate}
 \alias{limit_rate}
-\alias{limit_rate.function}
-\alias{limit_rate.function_list}
 \alias{limit_rate.list}
+\alias{limit_rate.function_list}
+\alias{limit_rate.function}
 \title{Limit the rate at which a function will execute}
 \usage{
 limit_rate(f, ..., precision = 60)
@@ -48,4 +48,3 @@ system.time({limited$f(); limited$g()})
 \seealso{
 \code{\link{rate}}
 }
-
