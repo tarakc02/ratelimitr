@@ -19,7 +19,6 @@ token_dispenser <- function(n, period, precision = 60) {
         token <- front(tokens)
         if (now > token) {
             pop(tokens)
-            push(tokens, ceiling(time_now() * precision) + period)
             return(TRUE)
         }
 
@@ -27,13 +26,29 @@ token_dispenser <- function(n, period, precision = 60) {
         time_to_wait <- (token - now) / precision
         signalCondition(rate_limit_exception(time_to_wait))
     }
-    structure(request, class = "token_dispenser")
+
+    deposit <- function() {
+        push(tokens, ceiling(time_now() * precision) + period)
+        return(TRUE)
+    }
+
+    dispatch <- function(action) {
+        switch(action,
+               "request" = request,
+               "deposit" = deposit)
+    }
+
+    structure(dispatch, class = "token_dispenser")
 }
 
 request <- function(x, policy = wait) {
     tryCatch(
-        x(),
+        x("request")(),
         rate_limit_exception = function(e) policy(x, e),
         error = function(e) stop(e$message, call. = FALSE)
     )
+}
+
+deposit <- function(x) {
+    x("deposit")()
 }
