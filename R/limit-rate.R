@@ -61,6 +61,15 @@ limit_rate.function_list <- function(f, ..., precision = 60) {
 
     build_function <- function(fun) {
         newfun <- function(...) {
+
+            exit_fn <- function() {
+                still_good <- vapply(gatekeepers, deposit,
+                                     FUN.VALUE = logical(1))
+                if (!all(still_good)) stop("Unexpected error")
+            }
+
+            on.exit(exit_fn())
+
             args <- as.list(match.call())[-1]
             args <- lapply(
                 args,
@@ -73,13 +82,7 @@ limit_rate.function_list <- function(f, ..., precision = 60) {
             is_good <- vapply(gatekeepers, request,
                               FUN.VALUE = logical(1), policy = wait)
             if (all(is_good))
-                result <- eval(as.call(nf))
-            else stop("Unexpected error")
-
-            still_good <- vapply(gatekeepers, deposit,
-                                 FUN.VALUE = logical(1))
-
-            if (all(still_good)) return(result)
+                return(eval(as.call(nf)))
             else stop("Unexpected error")
         }
         formals(newfun) <- formals(args(fun))
