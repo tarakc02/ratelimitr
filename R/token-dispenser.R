@@ -4,6 +4,7 @@ time_now <- function()
 token_dispenser <- function(n, period, precision = 60) {
     assert_that(is.count(n))
     assert_that(is.number(period))
+    original_period <- period
 
     # times should be in increments of (1 / precision) of seconds
     # So period (entered in seconds) is converted to period * precision
@@ -35,7 +36,8 @@ token_dispenser <- function(n, period, precision = 60) {
     dispatch <- function(action) {
         switch(action,
                "request" = request,
-               "deposit" = deposit)
+               "deposit" = deposit,
+               "info" = list(n = n, period = original_period, precision = precision))
     }
 
     structure(dispatch, class = "token_dispenser")

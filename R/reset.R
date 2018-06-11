@@ -25,9 +25,9 @@ reset <- function(f) UseMethod("reset")
 
 #' @export
 reset.rate_limited_function <- function(f) {
-    func <- attr(f, "func")
-    rates <- attr(f, "rates")
-    precision <- attr(f, "precision")
+    func <- get_function(f)
+    rates <- get_rates(f)
+    precision <- get_precision(f)
     lim <- function(...) {
         limit_rate(func, ..., precision = precision)
     }
@@ -38,11 +38,11 @@ reset.rate_limited_function <- function(f) {
 reset.limited_function_list <- function(f) {
     funcs <- lapply(
         f,
-        function(fun) attr(fun, "func")
+        get_function
     )
     names(funcs) <- names(f)
-    rates <- attr(f[[1]], "rates")
-    precision <- attr(f[[1]], "precision")
+    rates <- get_rates(f)
+    precision <- get_precision(f)
     lim <- function(...) {
         limit_rate(funcs, ..., precision = precision)
     }

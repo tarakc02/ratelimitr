@@ -90,8 +90,7 @@ limit_rate.function_list <- function(f, ..., precision = 60) {
         structure(
             newfun,
             func = fun,
-            rates = rates,
-            precision = precision,
+            info = function() lapply(gatekeepers, function(x) x("info")),
             class = c("rate_limited_function", class(fun))
         )
     }
@@ -109,9 +108,9 @@ limit_rate.function <- function(f, ..., precision = 60) {
 #' @export
 print.rate_limited_function <- function(x, ...) {
     f <- x
-    rates <- attr(f, "rates")
-    func <- attr(f, "func")
-    precision <- attr(f, "precision")
+    rates <- get_rates(f)
+    func <- get_function(f)
+    precision <- get_precision(f)
 
     catrate <- function(rate) {
         cat("    ", rate[["n"]], "calls per", rate[["period"]], "seconds\n")
@@ -126,8 +125,8 @@ print.rate_limited_function <- function(x, ...) {
 #' @export
 print.limited_function_list <- function(x, ...) {
     flist <- x
-    rates <- attr(flist[[1]], "rates")
-    precision <- attr(flist[[1]], "precision")
+    rates <- get_rates(flist)
+    precision <- get_precision(flist)
 
     catrate <- function(rate) {
         cat("    ", rate[["n"]], "calls per", rate[["period"]], "seconds\n")
@@ -137,7 +136,7 @@ print.limited_function_list <- function(x, ...) {
         precision, " seconds):\n", sep = "")
     lapply(rates, catrate)
 
-    lapply(flist, function(f) print(attr(f, "func")))
+    lapply(flist, function(f) print(get_function(f)))
     invisible(x)
 
 }
