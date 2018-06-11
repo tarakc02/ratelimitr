@@ -16,7 +16,7 @@ test_that("can update rate of existing function, and it obeys the new rate", {
     tm <- timer(replicate(6, f_lim()))
     expect_gt(tm, .1)
 
-    update_rate(f_lim, rate(n = 3, period = .1))
-    tm2 <- timer(replciate(4, f_lim()))
+    UPDATE_RATE(f_lim, rate(n = 3, period = .1))
+    tm2 <- timer(replicate(4, f_lim()))
     expect_gt(tm2, .1)
 })
