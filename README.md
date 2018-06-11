@@ -2,7 +2,7 @@ ratelimitr
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ratelimitr)](https://cran.r-project.org/package=ratelimitr) [![Travis-CI Build Status](https://travis-ci.org/tarakc02/ratelimitr.svg?branch=master)](https://travis-ci.org/tarakc02/ratelimitr) [![Coverage Status](https://img.shields.io/codecov/c/github/tarakc02/ratelimitr/master.svg)](https://codecov.io/github/tarakc02/ratelimitr?branch=master)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ratelimitr)](https://cran.r-project.org/package=ratelimitr) [![Travis-CI Build Status](https://travis-ci.org/tarakc02/ratelimitr.svg?branch=master)](https://travis-ci.org/tarakc02/ratelimitr) [![Coverage Status](https://codecov.io/github/tarakc02/ratelimitr/badge.svg?branch=master)](https://codecov.io/github/tarakc02/ratelimitr?branch=master)
 
 Installation
 ------------
@@ -33,7 +33,7 @@ system.time(replicate(11, f()))
 # time with limiting
 system.time(replicate(11, f_lim()))
 #>    user  system elapsed 
-#>   0.015   0.000   1.032
+#>    0.00    0.00    1.05
 ```
 
 Multiple rates
@@ -51,7 +51,7 @@ f_lim <- limit_rate(
 # 10 calls do not trigger the rate limit
 system.time(replicate(10, f_lim()))
 #>    user  system elapsed 
-#>   0.002   0.000   0.002
+#>       0       0       0
 
 # sleeping in between tests to re-set the rate limit timer
 Sys.sleep(1)
@@ -59,17 +59,17 @@ Sys.sleep(1)
 # 11 function calls do trigger the rate limit
 system.time(replicate(11, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.013   0.000   0.129
+#>    0.00    0.00    0.14
 
 # similarly, 50 calls don't trigger the second rate limit
 system.time(replicate(50, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.055   0.003   0.526
+#>    0.00    0.00    0.56
 
 # but 51 calls do:
 system.time(replicate(51, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.085   0.000   1.020
+#>    0.00    0.00    1.05
 ```
 
 Multiple functions sharing one (or more) rate limit(s)
@@ -100,7 +100,7 @@ system.time(
     {limited$f(); limited$g(); limited$h()}
 )
 #>    user  system elapsed 
-#>   0.001   0.000   0.001
+#>       0       0       0
 
 # sleep in between tests to reset the rate limit timer
 Sys.sleep(1)
@@ -110,7 +110,7 @@ system.time(
     {limited$f(); limited$g(); limited$h(); limited$f()}
 )
 #>    user  system elapsed 
-#>   0.003   0.000   1.021
+#>    0.00    0.00    1.04
 ```
 
 Limitations
