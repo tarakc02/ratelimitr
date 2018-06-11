@@ -1,9 +1,21 @@
+#' Access the rate limit(s) of a rate limited function
+#'
+#' @param f A rate limited function or group of functions
+#'
 #' @export
 get_rates <- function(f) UseMethod("get_rates")
 
+#' Access the rate limit precision
+#'
+#' @param f A rate limited function or group of functions
+#'
 #' @export
 get_precision <- function(f) UseMethod("get_precision")
 
+#' Access the original function from a rate limited function
+#'
+#' @param f A rate limited function or group of functions
+#'
 #' @export
 get_function <- function(f) UseMethod("get_function")
 

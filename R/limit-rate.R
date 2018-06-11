@@ -22,7 +22,7 @@
 #' limited <- limit_rate(list(f = f, g = g), rate(n = 1, period = .1))
 #' system.time({limited$f(); limited$g()})
 #'
-#' @seealso \code{\link{rate}}
+#' @seealso \code{\link{rate}}, \code{\link{UPDATE_RATE}}
 #'
 #' @name limit_rate
 #' @export

@@ -46,5 +46,5 @@ system.time({limited$f(); limited$g()})
 
 }
 \seealso{
-\code{\link{rate}}
+\code{\link{rate}}, \code{\link{UPDATE_RATE}}
 }
