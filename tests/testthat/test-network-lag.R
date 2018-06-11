@@ -48,6 +48,5 @@ test_that("requests are received no faster than the allowed rate", {
     # now we have a request with a long lag followed immediately
     # by a request with no lag
     responses <- c(probe(1), probe(0))
-    if (!all(responses))
-        fail("limited function broke limits in presence of network lag")
+    expect_true(all(responses))
 })
