@@ -1,3 +1,4 @@
+#' @export
 UPDATE_RATE <- function(lf, ..., precision = 60) {
     gatekeeper_env <- parent.env(environment(lf))
 
