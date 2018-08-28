@@ -9,9 +9,10 @@
 
 ## Reverse dependencies
 
-There are two downstream dependencies, elevatr and HIBPwned: 
+There are three downstream dependencies: 
 
 Checked elevatr : 0 errors | 0 warnings | 0 notes
 Checked HIBPwned: 0 errors | 0 warnings | 0 notes
+Checked monkeylearn: 0 errors | 0 warnings | 0 notes
 
 ---
