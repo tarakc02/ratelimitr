@@ -1,3 +1,7 @@
+# ratelimitr 0.4.0
+
+* added the method UPDATE_RATE to modify existing rate-limited functions in place. 
+
 # ratelimitr 0.3.8
 
 * ratelimitr now measures time from just after prior function executions, rather than just before. This allows rate limits to be obeyed even in the presence of network latency (see #14). Thanks to @stephlocke.
