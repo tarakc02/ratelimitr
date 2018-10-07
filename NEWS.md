@@ -1,3 +1,7 @@
+# ratelimitr 0.4.1
+
+* update maintainer email address
+
 # ratelimitr 0.4.0
 
 * added the method UPDATE_RATE to modify existing rate-limited functions in place. 

@@ -1,13 +1,13 @@
 Package: ratelimitr
 Type: Package
 Title: Rate Limiting for R
-Version: 0.4.0
+Version: 0.4.1
 Author: Tarak Shah
-Maintainer: Tarak Shah <tarak_shah@berkeley.edu>
+Maintainer: Tarak Shah <tarak.shah@gmail.com>
 Description: Allows to limit the rate at which one or more functions can be called.
 License: MIT + file LICENSE
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Suggests: testthat,
     microbenchmark,
     knitr,
