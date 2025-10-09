@@ -6,3 +6,4 @@
 ^\.travis\.yml$
 ^codecov\.yml$
 ^revdep$
+^\.github$
