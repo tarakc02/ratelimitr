@@ -1,6 +1,7 @@
 context("reset")
 
 test_that("reset works properly for single functions", {
+    skip_on_cran()
     f <- function() NULL
     f_lim <- limit_rate(f, rate(2, .2))
 

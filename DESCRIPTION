@@ -3,6 +3,10 @@ Type: Package
 Title: Rate Limiting for R
 Version: 0.4.1
 Author: Tarak Shah
+Authors@R: person(given = "Tarak",
+                  family = "Shah",
+                  role = c("aut", "cre"),
+                  email = "tarak.shah@gmail.com")
 Maintainer: Tarak Shah <tarak.shah@gmail.com>
 Description: Allows to limit the rate at which one or more functions can be called.
 License: MIT + file LICENSE
