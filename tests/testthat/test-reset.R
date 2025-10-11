@@ -14,6 +14,7 @@ test_that("reset works properly for single functions", {
 })
 
 test_that("reset works properly for lists of functions", {
+    skip_on_cran()
     # see issue 8
     f <- function() "f"
     g <- function() "g"

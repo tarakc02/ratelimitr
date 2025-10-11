@@ -1,6 +1,7 @@
 context("repeated tests")
 
 test_that("rates are consistently obeyed", {
+    skip_on_cran()
     if(require("microbenchmark", quietly = TRUE)) {
         f <- function() NULL
         f_lim <- limit_rate(f, rate(n = 10, period = .03))
