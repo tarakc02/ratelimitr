@@ -1,3 +1,8 @@
+# ratelimitr 0.4.2
+
+* Add Authors@R field to DESCRIPTION file
+* Don't run flaky tests on CRAN (see #16)
+
 # ratelimitr 0.4.1
 
 * update maintainer email address
