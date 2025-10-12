@@ -3,7 +3,12 @@
 on:
   push:
     branches: [main, master]
-  pull_request:
+    pull_request:
+      schedule:
+      # every other month on the 15th day at 15:15
+        - cron: "15 15 15 */2 *"
+      # allow manually triggering workflow
+      workflow_dispatch:
 
 name: R-CMD-check.yaml
 
