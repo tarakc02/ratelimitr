@@ -6,8 +6,6 @@ ratelimitr
 <!-- badges: start -->
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ratelimitr)](https://cran.r-project.org/package=ratelimitr)
-[![Coverage
-Status](https://codecov.io/github/tarakc02/ratelimitr/badge.svg?branch=master)](https://codecov.io/github/tarakc02/ratelimitr?branch=master)
 [![R-CMD-check](https://github.com/tarakc02/ratelimitr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tarakc02/ratelimitr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -35,12 +33,12 @@ f_lim <- limit_rate(f, rate(n = 10, period = 1))
 # time without limiting
 system.time(replicate(11, f()))
 #>    user  system elapsed 
-#>   0.001   0.000   0.000
+#>       0       0       0
 
 # time with limiting
 system.time(replicate(11, f_lim()))
 #>    user  system elapsed 
-#>   0.005   0.000   1.047
+#>   0.005   0.000   1.046
 ```
 
 ## Multiple rates
@@ -60,7 +58,7 @@ f_lim <- limit_rate(
 # 10 calls do not trigger the rate limit
 system.time(replicate(10, f_lim()))
 #>    user  system elapsed 
-#>       0       0       0
+#>   0.000   0.000   0.001
 
 # sleeping in between tests to re-set the rate limit timer
 Sys.sleep(1)
@@ -68,17 +66,17 @@ Sys.sleep(1)
 # 11 function calls do trigger the rate limit
 system.time(replicate(11, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.001   0.000   0.142
+#>   0.001   0.001   0.143
 
 # similarly, 50 calls don't trigger the second rate limit
 system.time(replicate(50, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.005   0.001   0.557
+#>   0.009   0.000   0.574
 
 # but 51 calls do:
 system.time(replicate(51, f_lim())); Sys.sleep(1)
 #>    user  system elapsed 
-#>   0.012   0.001   1.039
+#>   0.012   0.001   1.041
 ```
 
 ## Multiple functions sharing one (or more) rate limit(s)
@@ -111,7 +109,7 @@ system.time(
     {limited$f(); limited$g(); limited$h()}
 )
 #>    user  system elapsed 
-#>   0.001   0.000   0.001
+#>       0       0       0
 
 # sleep in between tests to reset the rate limit timer
 Sys.sleep(1)
@@ -121,7 +119,7 @@ system.time(
     {limited$f(); limited$g(); limited$h(); limited$f()}
 )
 #>    user  system elapsed 
-#>   0.001   0.000   1.027
+#>   0.000   0.001   1.043
 ```
 
 ## Limitations
