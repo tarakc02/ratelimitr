@@ -1,6 +1,7 @@
 context("works with web APIs despite network lag")
 
 test_that("requests are received no faster than the allowed rate", {
+    skip_on_cran()
 
     # a function that contains a variable "lag" to
     # represent network lag

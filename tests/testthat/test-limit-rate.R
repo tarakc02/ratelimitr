@@ -5,6 +5,7 @@ timer <- function(expr) {
 }
 
 test_that("rate limited function does not exceed limits", {
+    skip_on_cran()
     f <- function() NULL
 
     f_lim <- limit_rate(

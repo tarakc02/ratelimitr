@@ -5,6 +5,7 @@ timer <- function(expr) {
 }
 
 test_that("can update rate of existing function, and it obeys the new rate", {
+    skip_on_cran()
     f <- function() NULL
 
     f_lim <- limit_rate(

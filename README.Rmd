@@ -4,9 +4,10 @@ output:
     github_document
 ---
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- badges: start -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ratelimitr)](https://cran.r-project.org/package=ratelimitr)
-[![Travis-CI Build Status](https://travis-ci.org/tarakc02/ratelimitr.svg?branch=master)](https://travis-ci.org/tarakc02/ratelimitr)
-[![Coverage Status](https://codecov.io/github/tarakc02/ratelimitr/badge.svg?branch=master)](https://codecov.io/github/tarakc02/ratelimitr?branch=master)
+[![R-CMD-check](https://github.com/tarakc02/ratelimitr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tarakc02/ratelimitr/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(

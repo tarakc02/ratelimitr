@@ -1,6 +1,7 @@
 context("rate limits work when function doesn't return")
 
 test_that("rate limits still work in face of errors", {
+    skip_on_cran()
     call_log <- rep(NA, 100)
     counter <- 1L
     f <- function() {
